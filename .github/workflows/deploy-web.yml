@@ -1,0 +1,28 @@
+# Despliega la PWA en Firebase Hosting.
+# Secretos: FIREBASE_SERVICE_ACCOUNT (JSON de cuenta de servicio), FIREBASE_PROJECT_ID
+# Variable de repositorio: VITE_API_URL (p. ej. https://hora-valle-api.onrender.com)
+name: deploy-web
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", "firebase.json", ".github/workflows/deploy-web.yml"]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "20"}
+      - run: npm install
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live
