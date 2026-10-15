@@ -1,0 +1,22 @@
+# Crea los 2 comercios con datos SINTÉTICOS (synthetic=true). Ejecución manual.
+# Secretos necesarios: DATABASE_URL
+name: seed-synthetic-shops
+on:
+  workflow_dispatch:
+    inputs:
+      reset:
+        description: "Borrar antes los comercios sintéticos"
+        type: boolean
+        default: true
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements-api.txt
+      - run: python -m db.migrate
+      - run: python -m scripts.seed_synthetic_shop ${{ inputs.reset && '--reset' || '' }}

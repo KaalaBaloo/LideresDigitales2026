@@ -1,0 +1,37 @@
+# Refresca los datos REALES de datos.madrid.es en Supabase.
+# Secretos necesarios: DATABASE_URL
+name: ingest-madrid
+on:
+  schedule:
+    - cron: "15 4 * * *"     # diario 04:15 UTC: censo, agenda, meteo, plazas de aparcamiento
+    - cron: "30 4 * * 1"     # lunes: aforos peatonales + curva patrón (publicación trimestral)
+  workflow_dispatch:
+    inputs:
+      connectors:
+        description: "conectores (vacío = todos)"
+        required: false
+        default: ""
+concurrency: ingest
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements-ingest.txt
+      - run: python -m db.migrate
+      - name: Ingesta
+        run: |
+          if [ -n "${{ github.event.inputs.connectors }}" ]; then
+            python -m ingest.run ${{ github.event.inputs.connectors }}
+          elif [ "${{ github.event.schedule }}" = "30 4 * * 1" ]; then
+            python -m ingest.run aforos
+          elif [ "${{ github.event.schedule }}" = "15 4 * * *" ]; then
+            python -m ingest.run censo agenda meteo parking
+          else
+            python -m ingest.run
+          fi

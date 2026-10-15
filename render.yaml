@@ -1,0 +1,53 @@
+# Blueprint de Render: API de negocio + servicio "edge" (simula el dispositivo de tienda).
+services:
+  - type: web
+    name: hora-valle-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-opus-5-5
+      - key: CORS_ORIGINS
+        sync: false
+      - key: SENSOR_API_KEY
+        sync: false
+      - key: EDGE_URL
+        sync: false   # p. ej. https://hora-valle-edge.onrender.com
+
+  - type: web
+    name: hora-valle-edge
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements-edge.txt
+    startCommand: uvicorn edge.service:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: HF_TOKEN
+        sync: false
+      - key: HF_PROVIDER
+        value: hf-inference
+      - key: DETECTOR_MODEL
+        value: facebook/detr-resnet-50
+      - key: DETECTOR_THRESHOLD
+        value: "0.7"
+      - key: SENSOR_API_KEY
+        sync: false
+      - key: API_URL
+        sync: false   # p. ej. https://hora-valle-api.onrender.com

@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.*
+!.env.example
+node_modules/
+web/dist/
+.firebase/
+data/*
+!data/test_frames/
+renders/
+*.log

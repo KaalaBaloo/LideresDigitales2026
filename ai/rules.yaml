@@ -1,0 +1,41 @@
+# Reglas de diagnóstico. Se evalúan EN ESTE ORDEN; editar textos y umbrales aquí.
+# Placeholders {campo} se rellenan con la evidencia numérica de cada regla.
+# confidence_base se ajusta en código según la fuerza de la evidencia (0–1).
+rules:
+  - code: OFERTA_PARES_GRUPOS_IMPARES
+    enabled: true
+    params: {min_odd_share: 0.40}
+    confidence_base: 0.55
+    text: >-
+      La oferta exige grupos pares, pero el {odd_pct} % de los grupos son impares:
+      en un grupo de 3 alguien se queda fuera.
+
+  - code: PROMO_TRAS_PICO
+    enabled: true
+    params: {min_delay_h: 1}
+    confidence_base: 0.50
+    text: >-
+      La promo empezó a las {start_hour}:00, {delay_h} h después del pico de paso
+      de las {peak_hour}:00.
+
+  - code: TICKET_BAJO_CANIBALIZA
+    enabled: true
+    params: {min_entries_change: 0.15, max_ticket_change: -0.15}
+    confidence_base: 0.55
+    text: >-
+      Entró más gente ({entries_pct} % más) pero el ticket medio bajó un {ticket_drop_pct} %:
+      la oferta se come el margen.
+
+  - code: CAUSA_EXTERNA_CLIMA
+    enabled: true
+    params: {hot_c: 33, rain_mm: 1.0}
+    confidence_base: 0.45
+    text: >-
+      El tiempo pudo pesar más que la oferta: {weather_desc}.
+
+  - code: COMPETENCIA_ALTA
+    enabled: true
+    params: {min_competitors: 8}
+    confidence_base: 0.35
+    text: >-
+      Hay {competitors_100m} locales de tu misma actividad a menos de 100 m.

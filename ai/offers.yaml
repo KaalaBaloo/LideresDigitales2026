@@ -1,0 +1,48 @@
+# Catálogo de ofertas. Restricciones declarativas que el recomendador respeta:
+#   requiere_grupo_par: la ventaja solo es completa con grupos de 2, 4, ...
+#   segmentos: públicos a los que va dirigida
+#   descuento_pct: se compara con el descuento máximo del perfil del comercio
+#   min_grupo: tamaño mínimo de grupo
+offers:
+  - id: 2x1
+    titulo: "2x1 en una selección"
+    requiere_grupo_par: true
+    segmentos: [dos_adultos, grupo_adultos_3_6]
+    descuento_pct: 50
+    min_grupo: 2
+  - id: grupo_20
+    titulo: "20 % de descuento si entráis todos"
+    requiere_grupo_par: false
+    segmentos: [grupo_adultos_3_6, grupo_grande, dos_adultos]
+    descuento_pct: 20
+    min_grupo: 2
+  - id: pack_familia
+    titulo: "15 % para familias con peques"
+    requiere_grupo_par: false
+    segmentos: [adulto_con_ninos, familia_numerosa]
+    descuento_pct: 15
+    min_grupo: 2
+  - id: detalle_infantil
+    titulo: "Un detalle para cada niño"
+    requiere_grupo_par: false
+    segmentos: [adulto_con_ninos, familia_numerosa]
+    descuento_pct: 5
+    min_grupo: 2
+  - id: uno_de_cinco_gratis
+    titulo: "Grupos de 5 o más: uno gratis"
+    requiere_grupo_par: false
+    segmentos: [grupo_grande, grupo_adultos_3_6]
+    descuento_pct: 20
+    min_grupo: 5
+  - id: solo_15
+    titulo: "15 % si vienes por tu cuenta"
+    requiere_grupo_par: false
+    segmentos: [solo]
+    descuento_pct: 15
+    min_grupo: 1
+  - id: vecinos_10
+    titulo: "10 % para el barrio"
+    requiere_grupo_par: false
+    segmentos: [solo, dos_adultos, adulto_con_ninos, familia_numerosa, grupo_adultos_3_6, grupo_grande]
+    descuento_pct: 10
+    min_grupo: 1
