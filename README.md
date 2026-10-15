@@ -1,4 +1,5 @@
-# Hora Valle + Efecto Sombra · atravia
+# Atravia - Hora Valle + Efecto Sombra
+Atravia ayuda a los comercios locales de Madrid a convertir en clientes a la gente que ya pasa por su puerta. Detecta cuántas personas pasan, en qué tipo de grupo y a qué hora, calcula la oportunidad perdida y propone la oferta que mejor encaja con ese público, aprendiendo de cada campaña.
 
 Plataforma *smart city* para que los comercios locales de Madrid atraigan clientes con
 promociones adaptadas al flujo peatonal, la hora y el **tipo de grupos** que pasan por su
